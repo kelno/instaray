@@ -15,10 +15,10 @@ import (
 )
 
 // Regex patterns.
-const (
-	regexForInstagram = `(?i)^(https?://)?(www\.)?instagram\.com` // Instagram URL pattern
-	regexForTwitter   = `(?i)^(https?://)?twitter\.com`           // Twitter URL pattern
-	regexForX         = `(?i)^(https?://)?x\.com`                 // X URL pattern
+var (
+	regexForInstagram = regexp.MustCompile(`(?i)^(https?://)?(www\.)?instagram\.com`) // Instagram
+	regexForTwitter   = regexp.MustCompile(`(?i)^(https?://)?twitter\.com`)           // Twitter
+	regexForX         = regexp.MustCompile(`(?i)^(https?://)?x\.com`)                 // X
 )
 
 // Config holds the configuration for the Instaray.
@@ -103,12 +103,12 @@ func (i Instaray) isChatIdAllowed(chatId int64) bool {
 // parseMessage parses the incoming Telegram message and returns the fixed URL.
 func parseMessage(msg *TelegramMessage) bool {
 	switch {
-	case regexp.MustCompile(regexForInstagram).MatchString(msg.Text):
-		msg.Text = regexp.MustCompile(regexForInstagram).ReplaceAllString(msg.Text, "www.ddinstagram.com")
-	case regexp.MustCompile(regexForTwitter).MatchString(msg.Text):
-		msg.Text = regexp.MustCompile(regexForTwitter).ReplaceAllString(msg.Text, "https://fxtwitter.com")
-	case regexp.MustCompile(regexForX).MatchString(msg.Text):
-		msg.Text = regexp.MustCompile(regexForX).ReplaceAllString(msg.Text, "https://fixupx.com")
+	case regexForInstagram.MatchString(msg.Text):
+		msg.Text = regexForInstagram.ReplaceAllString(msg.Text, "www.ddinstagram.com")
+	case regexForTwitter.MatchString(msg.Text):
+		msg.Text = regexForTwitter.ReplaceAllString(msg.Text, "https://fxtwitter.com")
+	case regexForX.MatchString(msg.Text):
+		msg.Text = regexForX.ReplaceAllString(msg.Text, "https://fixupx.com")
 	default:
 		return false
 	}
