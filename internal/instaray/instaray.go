@@ -7,18 +7,12 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
-	"regexp"
 	"slices"
+	"strings"
 
 	"github.com/Madh93/instaray/internal/config"
+	"github.com/Madh93/instaray/internal/embed"
 	"github.com/Madh93/instaray/internal/logging"
-)
-
-// Regex patterns.
-var (
-	regexForInstagram = regexp.MustCompile(`(?i)^(https?://)?(www\.)?instagram\.com`) // Instagram
-	regexForTwitter   = regexp.MustCompile(`(?i)^(https?://)?twitter\.com`)           // Twitter
-	regexForX         = regexp.MustCompile(`(?i)^(https?://)?x\.com`)                 // X
 )
 
 // Config holds the configuration for the Instaray.
@@ -32,6 +26,7 @@ type Instaray struct {
 	telegram  *Telegram
 	logger    *logging.Logger
 	allowlist []int64
+	embeds    []*embed.Embed
 }
 
 // New creates a new Instaray instance, initializing the Telegram client.
@@ -40,6 +35,11 @@ func New(logger *logging.Logger, config *Config) *Instaray {
 		telegram:  createTelegram(logger, config.Telegram),
 		allowlist: config.Telegram.Allowlist,
 		logger:    logger,
+		embeds: []*embed.Embed{
+			embed.New("instagram", "ddinstagram.com"),
+			embed.New("twitter", "fxtwitter.com"),
+			embed.New("x", "fixupx.com"),
+		},
 	}
 }
 
@@ -74,7 +74,7 @@ func (i Instaray) handler(ctx context.Context, _ *Bot, update *TelegramUpdate) {
 	i.logger.Debug("Received message from allowed chat ID", msg.Attrs()...)
 
 	// Parse the message to get the fixed URL
-	if ok := parseMessage(&msg); !ok {
+	if ok := i.parseMessage(&msg); !ok {
 		return
 	}
 
@@ -101,17 +101,19 @@ func (i Instaray) isChatIdAllowed(chatId int64) bool {
 }
 
 // parseMessage parses the incoming Telegram message and returns the fixed URL.
-func parseMessage(msg *TelegramMessage) bool {
-	switch {
-	case regexForInstagram.MatchString(msg.Text):
-		msg.Text = regexForInstagram.ReplaceAllString(msg.Text, "www.ddinstagram.com")
-	case regexForTwitter.MatchString(msg.Text):
-		msg.Text = regexForTwitter.ReplaceAllString(msg.Text, "https://fxtwitter.com")
-	case regexForX.MatchString(msg.Text):
-		msg.Text = regexForX.ReplaceAllString(msg.Text, "https://fixupx.com")
-	default:
+func (i Instaray) parseMessage(msg *TelegramMessage) bool {
+	// Ignore message with multiple words
+	if strings.Contains(strings.TrimSpace(msg.Text), " ") {
 		return false
 	}
 
-	return true
+	// Fix embed
+	for _, embed := range i.embeds {
+		if embed.Check(msg.Text) {
+			msg.Text = embed.Replace(msg.Text)
+			return true
+		}
+	}
+
+	return false
 }
