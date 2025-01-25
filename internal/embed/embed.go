@@ -20,7 +20,7 @@ type Embed struct {
 // New creates a new Embed instance with a specified platform and replacer string.
 func New(platform string, replacer string) *Embed {
 	return &Embed{
-		pattern:  regexp.MustCompile(fmt.Sprintf(`(?i)^(https?://)?(www\.)?%s\.com`, platform)),
+		pattern:  regexp.MustCompile(fmt.Sprintf(`(?i)^(https?://)?((www|vm)\.)?%s\.com`, platform)),
 		replacer: replacer,
 	}
 }

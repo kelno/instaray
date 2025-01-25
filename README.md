@@ -5,7 +5,7 @@
 [![Go Reference](https://pkg.go.dev/badge/github.com/Madh93/instaray.svg)](https://pkg.go.dev/github.com/Madh93/instaray)
 [![License](https://img.shields.io/badge/License-MIT-brightgreen)](LICENSE)
 
-`Instaray` is a simple [Telegram Bot](https://core.telegram.org/bots) written in [Go](https://go.dev/) that fixes Twitter and Instagram embeds in Telegram using [FxTwitter](https://github.com/FixTweet/FxTwitter) and [InstaFix](https://github.com/Wikidepia/InstaFix).
+`Instaray` is a simple [Telegram Bot](https://core.telegram.org/bots) written in [Go](https://go.dev/) that fixes Twitter, Instagram and TikTok embeds in Telegram using [FxTwitter](https://github.com/FixTweet/FxTwitter), [InstaFix](https://github.com/Wikidepia/InstaFix) and [vxtiktok](https://github.com/dylanpdx/vxtiktok).
 
 <p align="center">
   <a href="#features">Features</a> •
@@ -18,7 +18,7 @@
 
 ## Features
 
-- 🤖 Fixes **twitter.com**, **x.com** and **instagram.com** embeds.
+- 🤖 Fixes **twitter.com**, **x.com**, **instagram.com** and **tiktok.com** embeds.
 - 🔒 Support **chat ID allowlist**.
 - 🐳 **Production-ready Docker image** for easy **deployment**.
 

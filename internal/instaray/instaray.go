@@ -1,5 +1,5 @@
-// Package instaray implements a Telegram bot that parse Twitter and Instagram
-// embeds.
+// Package instaray implements a Telegram bot that parse Twitter, Instagram and
+// TikTok embeds.
 package instaray
 
 import (
@@ -39,6 +39,7 @@ func New(logger *logging.Logger, config *Config) *Instaray {
 			embed.New("instagram", "ddinstagram.com"),
 			embed.New("twitter", "fxtwitter.com"),
 			embed.New("x", "fixupx.com"),
+			embed.New("tiktok", "vxtiktok.com"),
 		},
 	}
 }

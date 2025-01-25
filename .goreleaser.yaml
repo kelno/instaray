@@ -65,7 +65,7 @@ kos:
     labels:
       org.opencontainers.image.authors: Madh93
       org.opencontainers.image.created: "{{ .Date }}"
-      org.opencontainers.image.description: Telegram Bot for fixing Twitter/X and Instagram embeds
+      org.opencontainers.image.description: Telegram Bot for fixing Twitter/X, Instagram and TikTok embeds
       org.opencontainers.image.licenses: MIT
       org.opencontainers.image.source: "{{ .GitURL }}"
       org.opencontainers.image.revision: "{{ .FullCommit }}"
