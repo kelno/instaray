@@ -26,6 +26,7 @@ type Instaray struct {
 	telegram  *Telegram
 	logger    *logging.Logger
 	allowlist []int64
+	threads   []int
 	embeds    []*embed.Embed
 }
 
@@ -34,6 +35,7 @@ func New(logger *logging.Logger, config *Config) *Instaray {
 	return &Instaray{
 		telegram:  createTelegram(logger, config.Telegram),
 		allowlist: config.Telegram.Allowlist,
+		threads:   config.Telegram.Threads,
 		logger:    logger,
 		embeds: []*embed.Embed{
 			embed.New("instagram", "ddinstagram.com"),
@@ -72,7 +74,14 @@ func (i Instaray) handler(ctx context.Context, _ *Bot, update *TelegramUpdate) {
 		i.logger.Warn(fmt.Sprintf("Received message from not allowed chat ID. Allowed chats IDs: %v", i.allowlist), msg.Attrs()...)
 		return
 	}
-	i.logger.Debug("Received message from allowed chat ID", msg.Attrs()...)
+
+	// Check if the thread ID is allowed
+	if !i.isThreadIdAllowed(msg.MessageThreadID) {
+		i.logger.Warn(fmt.Sprintf("Received message from not allowed thread ID. Allowed thread IDs: %v", i.threads), msg.Attrs()...)
+		return
+	}
+
+	i.logger.Debug("Received message from allowed chat ID and allowed thread ID", msg.Attrs()...)
 
 	// Parse the message to get the fixed URL
 	if ok := i.parseMessage(&msg); !ok {
@@ -99,6 +108,11 @@ func (i Instaray) handler(ctx context.Context, _ *Bot, update *TelegramUpdate) {
 // isChatIdAllowed checks if the chat ID is allowed to receive messages.
 func (i Instaray) isChatIdAllowed(chatId int64) bool {
 	return len(i.allowlist) == 0 || slices.Contains(i.allowlist, chatId)
+}
+
+// isThreadIdAllowed checks if the thread ID is allowed to receive messages.
+func (i Instaray) isThreadIdAllowed(threadId int) bool {
+	return len(i.threads) == 0 || slices.Contains(i.threads, threadId)
 }
 
 // parseMessage parses the incoming Telegram message and returns the fixed URL.

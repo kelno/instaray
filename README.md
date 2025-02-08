@@ -19,7 +19,7 @@
 ## Features
 
 - 🤖 Fixes **twitter.com**, **x.com**, **instagram.com** and **tiktok.com** embeds.
-- 🔒 Support **chat ID allowlist**.
+- 🔒 Support **chat ID** and **thread ID allowlists**.
 - 🐳 **Production-ready Docker image** for easy **deployment**.
 
 ## Requirements
@@ -66,7 +66,7 @@ docker compose up
 Download the latest binary from [the releases page](https://github.com/Madh93/instaray/releases):
 
 ```sh
-curl -L https://github.com/Madh93/instaray/releases/latest/download/toffu_$(uname -s)_$(uname -m).tar.gz | tar -xz -O instaray > /usr/local/bin/instaray
+curl -L https://github.com/Madh93/instaray/releases/latest/download/instaray$(uname -s)_$(uname -m).tar.gz | tar -xz -O instaray > /usr/local/bin/instaray
 chmod +x /usr/local/bin/instaray
 ```
 
@@ -92,7 +92,7 @@ instaray -config custom.config.tml
 
 ### Overriding with environment variables
 
-Additionally, you can overridethe configuration values using environment variables that begin with the prefix `INSTARAY_`. This allows you to customize your setup without needing to modify any configuration file:
+Additionally, you can override the configuration values using environment variables that begin with the prefix `INSTARAY_`. This allows you to customize your setup without needing to modify any configuration file:
 
 ```sh
 INSTARAY_LOGGING_LEVEL=debug INSTARAY_TELEGRAM_ALLOWLIST=chat_id_1,chat_id_2 instaray
