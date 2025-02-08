@@ -1,8 +1,6 @@
-name: Default Workflow
+name: Check Pull Requst
 
 on:
-  push:
-   branches: [main]
   pull_request:
     branches: [main]
 
