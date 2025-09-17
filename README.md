@@ -1,3 +1,5 @@
+Fork using kkinstagram.com instead of dd.
+
 # Instaray
 
 [![Latest release](https://img.shields.io/github/v/tag/Madh93/instaray?label=Release)](https://github.com/Madh93/instaray/releases)
